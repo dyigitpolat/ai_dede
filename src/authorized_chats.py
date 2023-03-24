@@ -1,0 +1,1 @@
+authorized_chat_ids = [12345678]
