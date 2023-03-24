@@ -40,4 +40,5 @@ class OpenAIClient:
         
         except Exception as e:
             print("Error: ", e)
+            self.chat_history.messages.pop(0)
             return "No response."

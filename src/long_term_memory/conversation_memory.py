@@ -15,10 +15,11 @@ class ConversationMemory:
     def add_conversation_pair(self, context_summary, user_content, assistant_content):
         date = datetime.datetime.fromtimestamp(time.time()).strftime('%d/%m/%Y')
         clock = datetime.datetime.fromtimestamp(time.time()).strftime('%H:%M')
+        secs = datetime.datetime.fromtimestamp(time.time()).strftime('%S')
         text = Prompts.conversation_memo_prompt_f.format(
             date, clock, context_summary, user_content, assistant_content)
 
-        self.conversation_index.insert(llama_index.Document(text))
+        self.conversation_index.insert(llama_index.Document(text, doc_id=f"conversation_{date}_{clock}_{secs}"))
 
     def remember_for(self, context_summary, query):
         text = Prompts.keyword_generation_prompt_f.format(context_summary, query)
@@ -28,8 +29,10 @@ class ConversationMemory:
 
         recall_result = None
         if len(what_to_remember):
-            query_result = self.conversation_index.query("Inform about: " + what_to_remember)
-            recall_result = f"\n\n{query_result.get_formatted_sources(2000)}"
+            query_result = self.conversation_index.query("Within conversations: " + what_to_remember)
+            recall_result = query_result.response
+            if recall_result is not None:
+                recall_result += f"\n\n{query_result.get_formatted_sources(300)}"
             print("Recall result: ", recall_result)
 
         if recall_result is not None:
