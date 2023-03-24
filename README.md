@@ -24,4 +24,4 @@ telegram_bot_api_key = "telegram_bot_api_key"
 
 ## License
 
-ai dede is distributed under the [MIT License](https://github.com/yourusername/ai dede/LICENSE).
+ai dede is distributed under the [MIT License](https://github.com/dyigitpolat/ai_dede/LICENSE).
